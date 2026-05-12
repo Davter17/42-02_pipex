@@ -39,6 +39,17 @@ int	wait_end(pid_t pid1, pid_t pid2)
 	return (1);
 }
 
+int	init_pipe(int *pipe_fd, int fd_in, int fd_out)
+{
+	if (pipe(pipe_fd) == -1)
+	{
+		close(fd_in);
+		close(fd_out);
+		exit(1);
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	int		fd_in;
@@ -54,8 +65,7 @@ int	main(int argc, char **argv)
 	}
 	if (!open_files(argv[1], argv[4], &fd_in, &fd_out))
 		return (1);
-	if (pipe(pipe_fd) == -1)
-		exit(1);
+	init_pipe(pipe_fd, fd_in, fd_out);
 	pid1 = create_child(argv[2], fd_in, pipe_fd[1], pipe_fd[0]);
 	pid2 = create_child(argv[3], pipe_fd[0], fd_out, pipe_fd[1]);
 	close(fd_in);

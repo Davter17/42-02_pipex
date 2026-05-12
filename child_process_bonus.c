@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   child_process.c                                    :+:      :+:    :+:   */
+/*   child_process_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/03/03 13:04:06 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/05/12 00:00:00 by mpico-bu          #+#    #+#             */
+/*   Updated: 2025/05/12 00:00:00 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-// Divide un comando en sus argumentos.
 char	**split_command(const char *command)
 {
 	char	**args;
@@ -26,7 +25,6 @@ char	**split_command(const char *command)
 	return (args);
 }
 
-// Ejecuta un comando en un proceso hijo con redirección.
 void	exec_command(char **args, char *executable)
 {
 	execve(executable, args, environ);
@@ -62,18 +60,4 @@ void	execute_child(const char *cmd, int input_fd, int output_fd)
 		exit(127);
 	}
 	exec_command(args, executable);
-}
-
-// Crea un proceso hijo y ejecuta un comando.
-pid_t	create_child(const char *cmd, int in_fd, int out_fd, int close_fd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		close(close_fd);
-		execute_child(cmd, in_fd, out_fd);
-	}
-	return (pid);
 }
