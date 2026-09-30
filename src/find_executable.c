@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_executable_bonus.c                            :+:      :+:    :+:   */
+/*   find_executable.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 00:00:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/12 00:00:00 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/04/05 20:39:42 by event             #+#    #+#             */
+/*   Updated: 2025/04/06 23:50:06 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 char	*get_path_env(void)
 {
@@ -51,18 +51,17 @@ char	*find_executable(char *command)
 	if (access(command, X_OK) == 0)
 		return (ft_strdup(command));
 	path = get_path_env();
-	dirs = ft_split(path, ':');
-	if (!path || !dirs)
+	if (!path)
 		return (NULL);
-	i = 0;
-	while (dirs[i])
+	dirs = ft_split(path, ':');
+	if (!dirs)
+		return (NULL);
+	i = -1;
+	while (dirs[i++])
 	{
-		full_path = join_path(dirs[i++], command);
+		full_path = join_path(dirs[i], command);
 		if (full_path && access(full_path, X_OK) == 0)
-		{
-			free_array2(dirs);
-			return (full_path);
-		}
+			return (free_array2(dirs), full_path);
 		free(full_path);
 	}
 	free_array2(dirs);

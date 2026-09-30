@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_bonus.c                                    :+:      :+:    :+:   */
+/*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 00:00:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/12 00:00:00 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/04/05 20:39:42 by event             #+#    #+#             */
+/*   Updated: 2025/04/06 23:50:06 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 void	fork_processes(t_pipex *data, int **pipes)
 {
@@ -21,6 +21,11 @@ void	fork_processes(t_pipex *data, int **pipes)
 	while (i < data->cmd_count)
 	{
 		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			return ;
+		}
 		if (pid == 0)
 			setup_pipes(data, pipes, i);
 		i++;

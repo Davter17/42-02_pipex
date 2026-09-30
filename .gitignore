@@ -1,0 +1,27 @@
+# Object files
+.obj/
+*.o
+
+# Text files
+*.txt
+
+# Binaries
+pipex
+*.out
+
+# Libraries
+*.a
+
+# Dependencies
+.deps/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/

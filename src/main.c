@@ -5,14 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/14 19:00:22 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/03/03 14:32:16 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/04/05 20:39:42 by event             #+#    #+#             */
+/*   Updated: 2025/04/06 23:50:06 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// Abre archivos de entrada y salida, configurando descriptores.
 int	open_files(char *input, char *output, int *fd_in, int *fd_out)
 {
 	*fd_in = open(input, O_RDONLY);
@@ -27,7 +26,6 @@ int	open_files(char *input, char *output, int *fd_in, int *fd_out)
 	return (1);
 }
 
-// Espera y devuelve el código de salida de dos procesos.
 int	wait_end(pid_t pid1, pid_t pid2)
 {
 	int	status;
@@ -50,6 +48,14 @@ int	init_pipe(int *pipe_fd, int fd_in, int fd_out)
 	return (1);
 }
 
+static void	close_all_fds(int fd_in, int fd_out, int *pipe_fd)
+{
+	close(fd_in);
+	close(fd_out);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+}
+
 int	main(int argc, char **argv)
 {
 	int		fd_in;
@@ -68,9 +74,8 @@ int	main(int argc, char **argv)
 	init_pipe(pipe_fd, fd_in, fd_out);
 	pid1 = create_child(argv[2], fd_in, pipe_fd[1], pipe_fd[0]);
 	pid2 = create_child(argv[3], pipe_fd[0], fd_out, pipe_fd[1]);
-	close(fd_in);
-	close(fd_out);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
+	close_all_fds(fd_in, fd_out, pipe_fd);
+	if (pid1 == -1 || pid2 == -1)
+		return (1);
 	return (wait_end(pid1, pid2));
 }
